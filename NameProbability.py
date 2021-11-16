@@ -6,7 +6,7 @@ from counter import _editCounts, _ngramCount, _probName, _condProbName, _probSam
 import argparse
 
 class NameMatcher():
-    def __init__(self, name_list=None, ngram_len=5, smoothing=.001, unique=0, 
+    def __init__(self, name_list=None, ngram_len=5, smoothing=.001, unique=0,
         edit_count_max=None, last_comma_first=0, name_list_location=None,
         save_location=None, use_SS=0):
         '''
@@ -70,8 +70,8 @@ class NameMatcher():
 
     def ngramCount(self, name_list):
         self.ngram_count = _ngramCount(name_list, self.ngram_len)
-    
-    
+
+
     def editCounts(self, name_list):
         # to compute probability of edit operations use a subsample of names
         if self.edit_count_max:
@@ -91,7 +91,7 @@ class NameMatcher():
         if len(name) < self.ngram_len:
             return 0
         if name not in self.memoize:
-            self.memoize = _probName(name, self.ngram_len, self.ngram_count, 
+            self.memoize = _probName(name, self.ngram_len, self.ngram_count,
                                      self.smoothing, self.memoize)
         return self.memoize[name]
 
@@ -133,34 +133,34 @@ class NameMatcher():
     def loadNameList(self):
         with open(self.name_list_location, 'r') as f2:
             self.name_list = f2.read().split('\n')
-        
+
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--name_list_location', help='Path to name list', 
+    parser.add_argument('--name_list_location', help='Path to name list',
                         type=str, required=True)
     parser.add_argument('--ngram_len', help='Length of ngram for probability calculation, default = 5',
                         type=int, default=5)
-    parser.add_argument('--smoothing', help='Smoothing factor, default = 0.001', 
+    parser.add_argument('--smoothing', help='Smoothing factor, default = 0.001',
                         type=float, default=0.001)
-    parser.add_argument('--unique', help='0 = names are non-unique, 1 = names should be considered unique, default = 0', 
+    parser.add_argument('--unique', help='0 = names are non-unique, 1 = names should be considered unique, default = 0',
                         type=int, default=0)
-    parser.add_argument('--last_comma_first', help='0 = names in "first last" format, 1 = names in "last, first" format, default = 1', 
+    parser.add_argument('--last_comma_first', help='0 = names in "first last" format, 1 = names in "last, first" format, default = 1',
                         type=int, default=1)
-    parser.add_argument('--edit_count_max', help='number of names to use to estimate edit probabilities', 
+    parser.add_argument('--edit_count_max', help='number of names to use to estimate edit probabilities',
                         type=int)
     parser.add_argument('--use_SS', help='1 = use SS data to for training, default=0',
                         type=int)
 
-    parser.add_argument('--save_location', help='file path for pickled dump', 
+    parser.add_argument('--save_location', help='file path for pickled dump',
                         type=str)
     args = parser.parse_args()
 
-    temp = NameMatcher(ngram_len=args.ngram_len, 
-                       smoothing=args.smoothing, 
+    temp = NameMatcher(ngram_len=args.ngram_len,
+                       smoothing=args.smoothing,
                        unique=args.unique,
-                       edit_count_max=args.edit_count_max, 
+                       edit_count_max=args.edit_count_max,
                        last_comma_first=args.last_comma_first,
                        name_list_location = args.name_list_location,
                        save_location=args.save_location,

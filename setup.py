@@ -15,6 +15,5 @@ setup(
     requires = [
         "Levenshtein",
         "NumPy",
-        "Numba"
     ],
 )

@@ -1,10 +1,7 @@
 import Levenshtein as edist
 import numpy as np
 from collections import defaultdict
-from numba import jit
 
-
-@jit
 def _editCounts(name_samp):
     # to compute probability of edit operations use a subsample of names
     edit_count = defaultdict(int)
@@ -22,7 +19,6 @@ def _editCounts(name_samp):
     return edit_count, total_edits
 
 
-@jit
 def _ngramCount(name_list, ngram_len):
     ngram_count = defaultdict(int)
     for i in range(len(name_list)):
@@ -35,7 +31,6 @@ def _ngramCount(name_list, ngram_len):
     return ngram_count
 
 
-@jit
 def _probName(name, ngram_len, ngram_count, smoothing, memoize):
     log_prob = 0.0
     for start in range(len(name) - (ngram_len - 1)):
@@ -48,7 +43,6 @@ def _probName(name, ngram_len, ngram_count, smoothing, memoize):
     return memoize
 
 
-@jit
 def _condProbName(name1, name2, edit_count, total_edits, smoothing, cp_memoize):
     # computes the conditional probability of arriving at name1
     # by performing a series of operation on name2.
@@ -64,7 +58,6 @@ def _condProbName(name1, name2, edit_count, total_edits, smoothing, cp_memoize):
     return cp_memoize
 
 
-@jit
 def _probSamePerson(name1, name2, pop_size, edit_count, total_edits, smoothing,
                     ngram_len, ngram_count, memoize, cp_memoize, psp_memoize):
     # computes the probability that the two names belong to the same person.
